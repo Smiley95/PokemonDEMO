@@ -25,7 +25,7 @@ def lrelu(x, n, leak=0.2):
 def process_data():   
     current_dir = os.getcwd()
     # parent = os.path.dirname(current_dir)
-    pokemon_dir = os.path.join('Pokemon_GAN', 'data')
+    pokemon_dir = os.path.join(current_dir, 'data')
     images = []
     for each in os.listdir(pokemon_dir):
         images.append(os.path.join(pokemon_dir,each))
@@ -66,12 +66,12 @@ def generator(input, random_dim, is_train, reuse=False):
     c4, c8, c16, c32, c64 = 512, 256, 128, 64, 32 # channel num
     s4 = 4
     output_dim = CHANNEL  # RGB image
-    with tf.variable_scope('gen') as scope:
+    with tf.compat.v1.variable_scope('gen') as scope:
         if reuse:
             scope.reuse_variables()
-        w1 = tf.get_variable('w1', shape=[random_dim, s4 * s4 * c4], dtype=tf.float32,
+        w1 = tf.compat.v1.get_variable('w1', shape=[random_dim, s4 * s4 * c4], dtype=tf.float32,
                              initializer=tf.truncated_normal_initializer(stddev=0.02))
-        b1 = tf.get_variable('b1', shape=[c4 * s4 * s4], dtype=tf.float32,
+        b1 = tf.compat.v1.get_variable('b1', shape=[c4 * s4 * s4], dtype=tf.float32,
                              initializer=tf.constant_initializer(0.0))
         flat_conv1 = tf.add(tf.matmul(input, w1), b1, name='flat_conv1')
          #Convolution, bias, activation, repeat! 
@@ -115,7 +115,7 @@ def generator(input, random_dim, is_train, reuse=False):
 
 def discriminator(input, is_train, reuse=False):
     c2, c4, c8, c16 = 64, 128, 256, 512  # channel num: 64, 128, 256, 512
-    with tf.variable_scope('dis') as scope:
+    with tf.compat.v1.variable_scope('dis') as scope:
         if reuse:
             scope.reuse_variables()
 
@@ -149,9 +149,9 @@ def discriminator(input, is_train, reuse=False):
         fc1 = tf.reshape(act4, shape=[-1, dim], name='fc1')
       
         
-        w2 = tf.get_variable('w2', shape=[fc1.shape[-1], 1], dtype=tf.float32,
+        w2 = tf.compat.v1.get_variable('w2', shape=[fc1.shape[-1], 1], dtype=tf.float32,
                              initializer=tf.truncated_normal_initializer(stddev=0.02))
-        b2 = tf.get_variable('b2', shape=[1], dtype=tf.float32,
+        b2 = tf.compat.v1.get_variable('b2', shape=[1], dtype=tf.float32,
                              initializer=tf.constant_initializer(0.0))
 
         # wgan just get rid of the sigmoid
@@ -164,7 +164,7 @@ def discriminator(input, is_train, reuse=False):
 def train():
     random_dim = 100
     
-    with tf.variable_scope('input'):
+    with tf.compat.v1.variable_scope('input'):
         #real and fake image placholders
         real_image = tf.placeholder(tf.float32, shape = [None, HEIGHT, WIDTH, CHANNEL], name='real_image')
         random_input = tf.placeholder(tf.float32, shape=[None, random_dim], name='rand_input')
@@ -256,7 +256,7 @@ def train():
 
 # def test():
     # random_dim = 100
-    # with tf.variable_scope('input'):
+    # with tf.compat.v1.variable_scope('input'):
         # real_image = tf.placeholder(tf.float32, shape = [None, HEIGHT, WIDTH, CHANNEL], name='real_image')
         # random_input = tf.placeholder(tf.float32, shape=[None, random_dim], name='rand_input')
         # is_train = tf.placeholder(tf.bool, name='is_train')
@@ -267,7 +267,7 @@ def train():
     # fake_result = discriminator(fake_image, is_train, reuse=True)
     # sess = tf.InteractiveSession()
     # sess.run(tf.global_variables_initializer())
-    # variables_to_restore = slim.get_variables_to_restore(include=['gen'])
+    # variables_to_restore = slim.compat.v1.get_variables_to_restore(include=['gen'])
     # print(variables_to_restore)
     # saver = tf.train.Saver(variables_to_restore)
     # ckpt = tf.train.latest_checkpoint('./model/' + version)
