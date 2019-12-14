@@ -15,7 +15,7 @@ slim = tf.contrib.slim
 
 HEIGHT, WIDTH, CHANNEL = 128, 128, 3
 BATCH_SIZE = 64
-EPOCH = 5000
+EPOCH = 10000
 version = 'newPokemon'
 newPoke_path = './' + version
 
@@ -25,7 +25,7 @@ def lrelu(x, n, leak=0.2):
 def process_data():   
     current_dir = os.getcwd()
     # parent = os.path.dirname(current_dir)
-    pokemon_dir = os.path.join(current_dir, 'data')
+    pokemon_dir = os.path.join('PokemonDEMO', 'data')
     images = []
     for each in os.listdir(pokemon_dir):
         images.append(os.path.join(pokemon_dir,each))
