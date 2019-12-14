@@ -2,7 +2,7 @@
 import os
 import cv2
 
-src = "./data" #pokeRGB_black
+src = ".PokemonDEMO/data" #pokeRGB_black
 dst = "./resizedData" # resized
 
 os.mkdir(dst)
